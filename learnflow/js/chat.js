@@ -1,10 +1,5 @@
 // ===== AI ASSISTANT CHAT =====
 
-// Backend API URL - change this for production
-// For local development: http://localhost:5000
-// For production: https://your-render-app.onrender.com
-const API_BASE_URL = 'http://localhost:5000';
-
 function toggleAI() {
   const chat = document.getElementById('aiChat');
   const fab = document.getElementById('aiFab');
@@ -39,43 +34,53 @@ async function sendAIMessage() {
   messages.appendChild(typingMsg);
   messages.scrollTop = messages.scrollHeight;
 
-  try {
-    // Call backend API
-    const response = await fetch(`${API_BASE_URL}/api/chat`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ message: msg })
-    });
-
-    if (!response.ok) {
-      throw new Error('API request failed');
-    }
-
-    const data = await response.json();
-    
+  // Simulate AI response delay
+  setTimeout(() => {
     // Remove typing indicator
     document.getElementById('typingIndicator')?.remove();
+    
+    // Generate AI response
+    const aiResponse = generateAIResponse(msg);
     
     // Add AI response
     const aiMsg = document.createElement('div');
     aiMsg.className = 'ai-msg ai-msg-ai';
-    aiMsg.innerHTML = `<div class="ai-msg-content">${data.response}</div>`;
+    aiMsg.innerHTML = `<div class="ai-msg-content">${aiResponse}</div>`;
     messages.appendChild(aiMsg);
     messages.scrollTop = messages.scrollHeight;
+  }, 800);
+}
 
-  } catch (error) {
-    console.error('Chat error:', error);
-    
-    // Remove typing indicator
-    document.getElementById('typingIndicator')?.remove();
-    
-    // Show error message
-    const errorMsg = document.createElement('div');
-    errorMsg.className = 'ai-msg ai-msg-ai';
-    errorMsg.innerHTML = `<div class="ai-msg-content">Sorry, I'm having trouble connecting. Please try again later.</div>`;
-    messages.appendChild(errorMsg);
-    messages.scrollTop = messages.scrollHeight;
+function generateAIResponse(query) {
+  const q = query.toLowerCase();
+  
+  if (q.includes('hello') || q.includes('hi') || q.includes('hey')) {
+    return "Hello! 👋 I'm your AI learning assistant. How can I help you today?";
+  } else if (q.includes('course') || q.includes('learn')) {
+    return "I can help you find the right course! We have courses in Programming, Design, Data Science, Business, and DevOps. What topic interests you most?";
+  } else if (q.includes('price') || q.includes('cost') || q.includes('free')) {
+    return "All our courses are completely free to enroll! You get lifetime access, progress tracking, and a certificate upon completion.";
+  } else if (q.includes('certificate')) {
+    return "Yes! You receive a certificate when you complete a course. Just finish all the video lessons and your certificate will be available.";
+  } else if (q.includes('progress') || q.includes('track')) {
+    return "Your progress is automatically saved as you watch videos. You can see your overall progress in your profile under 'My Learning'.";
+  } else if (q.includes('help') || q.includes('how')) {
+    return "I'm here to help! You can ask me about courses, pricing, certificates, progress tracking, or any other questions about LearnFlow.";
+  } else if (q.includes('programming') || q.includes('code') || q.includes('javascript') || q.includes('react')) {
+    return "We have great programming courses! Check out our Programming category for courses on JavaScript, React, Python, and more.";
+  } else if (q.includes('design')) {
+    return "Our Design courses cover UI/UX, graphic design, and Figma. Perfect for creative learners!";
+  } else if (q.includes('data') || q.includes('science') || q.includes('python')) {
+    return "Data Science is one of our popular categories! Learn Python for data analysis, machine learning basics, and data visualization.";
+  } else if (q.includes('devops') || q.includes('docker') || q.includes('kubernetes')) {
+    return "Our DevOps courses cover Docker, Kubernetes, CI/CD pipelines, and cloud deployment. Great for infrastructure engineers!";
+  } else if (q.includes('business') || q.includes('product')) {
+    return "Our Business courses include Product Management, agile methodologies, and business strategy. Perfect for aspiring PMs!";
+  } else if (q.includes('thank')) {
+    return "You're welcome! 😊 Let me know if you have any other questions.";
+  } else if (q.includes('bye') || q.includes('goodbye')) {
+    return "Goodbye! Happy learning! 🎓";
+  } else {
+    return "That's a great question! I'm your AI learning assistant. I can help you find courses, understand features, or guide your learning journey. What would you like to know?";
   }
 }
