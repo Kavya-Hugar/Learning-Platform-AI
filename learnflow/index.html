@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LearnFlow — Learn without limits</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="logo" onclick="go('home')">⚡ LearnFlow</div>
+  <div class="nsearch">
+    <span class="nsi">🔍</span>
+    <input type="text" placeholder="Search courses..." oninput="onSearch(this.value)">
+  </div>
+  <div class="nav-right" id="navR"></div>
+</nav>
+
+<!-- HOME -->
+<div class="view active" id="view-home">
+  <div class="hero">
+    <h1>Learn without <span>limits.</span></h1>
+    <p>Master new skills with structured video courses. Progress tracking, sequential unlocking, and resume playback built in.</p>
+    <div class="hbtns">
+      <button class="btn btn-a" onclick="go('subjects')">Explore Courses</button>
+      <button class="btn btn-o" onclick="go('register')">Start for free →</button>
+    </div>
+    <div class="stats">
+      <div><div class="stat-n">12K+</div><div class="stat-l">Students</div></div>
+      <div><div class="stat-n">48</div><div class="stat-l">Courses</div></div>
+      <div><div class="stat-n">320+</div><div class="stat-l">Video lessons</div></div>
+      <div><div class="stat-n">4.9★</div><div class="stat-l">Rating</div></div>
+    </div>
+  </div>
+  <div class="hsec">
+    <div class="section-h">Popular Courses</div>
+    <div class="cgrid" id="homeGrid"></div>
+  </div>
+  <div class="hsec" id="contSec" style="display:none">
+    <div class="section-h">Continue Learning</div>
+    <div class="cgrid" id="contGrid"></div>
+  </div>
+</div>
+
+<!-- LOGIN -->
+<div class="view" id="view-login">
+  <div class="auth-wrap">
+    <div class="auth-box">
+      <div class="auth-title">Welcome back</div>
+      <div class="auth-sub">Sign in to continue learning</div>
+      <div id="loginErr" class="errmsg" style="display:none"></div>
+      <div class="field">
+        <label>Email</label>
+        <input type="email" id="lemail" placeholder="you@example.com">
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <input type="password" id="lpass" placeholder="Password" onkeydown="if(event.key==='Enter')doLogin()">
+      </div>
+      <button class="asub" onclick="doLogin()">Sign in</button>
+      <div class="aswitch">No account? <a onclick="go('register')">Sign up free</a></div>
+      <div style="margin-top:12px;padding:10px;background:var(--bg3);border-radius:var(--r);font-size:11px;color:var(--text3);text-align:center">
+        Demo: use any email + password (min 6 chars) to register, then login
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- REGISTER -->
+<div class="view" id="view-register">
+  <div class="auth-wrap">
+    <div class="auth-box">
+      <div class="auth-title">Create account</div>
+      <div class="auth-sub">Join thousands of learners</div>
+      <div id="regErr" class="errmsg" style="display:none"></div>
+      <div class="field">
+        <label>Full name</label>
+        <input type="text" id="rname" placeholder="Alex Johnson">
+      </div>
+      <div class="field">
+        <label>Email</label>
+        <input type="email" id="remail" placeholder="you@example.com">
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <input type="password" id="rpass" placeholder="Min 6 characters" onkeydown="if(event.key==='Enter')doRegister()">
+      </div>
+      <button class="asub" onclick="doRegister()">Create account</button>
+      <div class="aswitch">Already have an account? <a onclick="go('login')">Sign in</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- SUBJECTS / BROWSE -->
+<div class="view" id="view-subjects">
+  <div class="subj-hdr">
+    <div class="section-h" style="margin-bottom:10px">All Courses</div>
+    <div class="tabs">
+      <button class="tab active" onclick="filterCat('all',this)">All</button>
+      <button class="tab" onclick="filterCat('programming',this)">Programming</button>
+      <button class="tab" onclick="filterCat('design',this)">Design</button>
+      <button class="tab" onclick="filterCat('data',this)">Data Science</button>
+      <button class="tab" onclick="filterCat('business',this)">Business</button>
+      <button class="tab" onclick="filterCat('devops',this)">DevOps</button>
+    </div>
+  </div>
+  <div class="hsec" style="padding-top:0">
+    <div class="cgrid" id="subjGrid"></div>
+  </div>
+</div>
+
+<!-- COURSE DETAIL -->
+<div class="view" id="view-subject">
+  <div class="cdetail">
+    <div id="courseMain"></div>
+    <div id="courseSide"></div>
+  </div>
+</div>
+
+<!-- VIDEO PLAYER -->
+<div class="view" id="view-video">
+  <div class="vlayout">
+    <div class="vmain" id="vmain"></div>
+    <div class="vsidebar" id="vsidebar"></div>
+  </div>
+</div>
+
+<!-- PROFILE -->
+<div class="view" id="view-profile">
+  <div class="pwrap" id="profileContent"></div>
+</div>
+
+<!-- TOAST NOTIFICATIONS -->
+<div class="toast-area" id="toastArea"></div>
+
+<!-- AI ASSISTANT -->
+<button class="ai-fab" id="aiFab" onclick="toggleAI()">💬</button>
+<div class="ai-chat" id="aiChat">
+  <div class="ai-header">
+    <div class="ai-title">AI Assistant</div>
+    <div class="ai-subtitle">Ask AI for learning help</div>
+    <button class="ai-close" onclick="toggleAI()">✕</button>
+  </div>
+  <div class="ai-messages" id="aiMessages">
+    <div class="ai-msg ai-msg-ai">
+      <div class="ai-msg-content">Hi! I am your AI learning assistant. How can I help you today?</div>
+    </div>
+  </div>
+  <div class="ai-input-area">
+    <input type="text" class="ai-input" id="aiInput" placeholder="Type your question..." onkeydown="if(event.key==='Enter')sendAIMessage()">
+    <button class="ai-send" onclick="sendAIMessage()">Send</button>
+  </div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script src="js/chat.js"></script>
+</body>
+</html>
