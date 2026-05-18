@@ -1,7 +1,9 @@
 // ===== AI ASSISTANT CHAT =====
 
 // Backend API URL - change this for production
-const API_BASE_URL = process.env.API_BASE_URL || 'http://localhost:5000';
+// For local development: http://localhost:5000
+// For production: https://your-render-app.onrender.com
+const API_BASE_URL = 'http://localhost:5000';
 
 function toggleAI() {
   const chat = document.getElementById('aiChat');
